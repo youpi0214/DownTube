@@ -1,9 +1,9 @@
-certifi @ file:///C:/b/abs_85o_6fm0se/croot/certifi_1671487778835/work/certifi
+# certifi @ file:///C:/b/abs_85o_6fm0se/croot/certifi_1671487778835/work/certifi
 charset-normalizer==2.1.1
 click==7.1.2
 colorama==0.4.6
 decorator==4.4.2
-idna==3.4
+# idna==3.4
 imageio==2.23.0
 imageio-ffmpeg==0.4.7
 moviepy==1.0.3

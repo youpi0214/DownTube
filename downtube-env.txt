@@ -1,7 +1,7 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: win-64
-@EXPLICIT
+# @EXPLICIT
 https://repo.anaconda.com/pkgs/main/win-64/ca-certificates-2022.10.11-haa95532_0.conda
 https://repo.anaconda.com/pkgs/main/noarch/tzdata-2022g-h04d1e81_0.conda
 https://repo.anaconda.com/pkgs/main/win-64/vs2015_runtime-14.27.29016-h5e58377_2.conda
