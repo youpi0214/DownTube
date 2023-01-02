@@ -14,6 +14,7 @@ class Home_Window(QMainWindow):
         self.Editor_push.clicked.connect(self.Editor_clicker)
         self.Settings_push.clicked.connect(self.Settings_clicker)
 
+
     def YoutubeDownloader_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() + 1)# YTDOWNLOADER Window index is 1 in stack so we increment +1
     def Editor_clicker(self):
@@ -30,6 +31,8 @@ class YoutubeDownloader_Window(QMainWindow):
         self.Settings_push.clicked.connect(self.Settings_clicker)
         self.DownloadNow_pushButton.clicked.connect(self.downloadnow)
         self.AddToQueue_pushButton.clicked.connect(self.addtoqueue)
+        self.Video_radioButton.clicked.connect(self.video_or_audio)
+        self.Audio_radioButton.clicked.connect(self.video_or_audio)
 
     def Home_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)
@@ -39,17 +42,28 @@ class YoutubeDownloader_Window(QMainWindow):
     def Settings_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() + 2)
 
+    def video_or_audio(self):
+        if (self.Video_radioButton.isChecked() or self.Audio_radioButton.isChecked()):
+            self.YoutubeURL_lineEdit.setEnabled(True)
+            self.DownloadNow_pushButton.setEnabled(True)
+            self.AddToQueue_pushButton.setEnabled(True)
+
+
     def addtoqueue(self):
         try:
             media = YouTube(self.YoutubeURL_lineEdit.text())
+            self.DownProcesses_tableWidget.insertRow(self.DownProcesses_tableWidget.rowCount())
+            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 1, media.thumbnail_url)
+            self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 1,
+                                                   QTableWidgetItem(media.channel_id))
+            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 3, QTableWidgetItem(media.title))
+            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 4, #PROGRESS)
         except PytubeError:
             message_except = QMessageBox()
             message_except.setText("Invalid URL, please try again.")
             message_except.exec()
-        else:
-            message_ok = QMessageBox()
-            message_ok.setText("Added to queue successfully.")
-            message_ok.exec()
+
+
 
         # playlist_url = self.YoutubeURL_lineEdit.text()
         # p = Playlist(playlist_url)
@@ -125,7 +139,7 @@ widget.addWidget(Homewindow)
 widget.addWidget(YTDownloadWindow)
 widget.addWidget(EditorWindow)
 widget.addWidget(SettingsWindow)
-widget.setFixedHeight(600)
-widget.setFixedWidth(800)
+widget.setFixedHeight(1000)
+widget.setFixedWidth(1000)
 widget.show()
 app.exec()
