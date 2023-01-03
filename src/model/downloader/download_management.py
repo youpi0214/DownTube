@@ -3,7 +3,7 @@ import enum
 from pytube import YouTube
 from pytube.cli import on_progress
 
-import downtube_utilities
+from utilities import general_utilities
 
 
 class DownloadState(enum.Enum):
@@ -27,7 +27,7 @@ class DownloadProcess(YouTube):
     def start_download(self):
 
         try:
-            title = downtube_utilities.slugify(value=self.title) + '.mp4'
+            title = general_utilities.slugify(value=self.title) + '.mp4'
             self.streams.filter(file_extension='mp4').get_highest_resolution().download(skip_existing=False, timeout=5,
                                                                                         filename=title)
             self.state = DownloadState.DOWNLOADING
