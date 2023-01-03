@@ -128,28 +128,12 @@
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>25</height>
-                  </size>
-                 </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="ChangeQuality_pushButton">
-                 <property name="minimumSize">
-                  <size>
-                   <width>30</width>
-                   <height>25</height>
-                  </size>
-                 </property>
+                <widget class="QToolButton" name="ChangeQuality_toolButton">
                  <property name="text">
-                  <string/>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="feather/gui_resources.qrc">
-                   <normaloff>:/icons/tool.svg</normaloff>:/icons/tool.svg</iconset>
+                  <string>...</string>
                  </property>
                 </widget>
                </item>
@@ -228,12 +212,12 @@
            <x>0</x>
            <y>0</y>
            <width>863</width>
-           <height>438</height>
+           <height>443</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QTableWidget" name="DownProcesses_tableWidget_3">
+           <widget class="QTableWidget" name="DownProcesses_tableWidget">
             <property name="font">
              <font>
               <family>Unispace</family>
@@ -242,7 +226,7 @@
              </font>
             </property>
             <property name="acceptDrops">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="sizeAdjustPolicy">
              <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -251,10 +235,10 @@
              <set>QAbstractItemView::NoEditTriggers</set>
             </property>
             <property name="dragEnabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="dragDropOverwriteMode">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="dragDropMode">
              <enum>QAbstractItemView::NoDragDrop</enum>
@@ -272,7 +256,7 @@
              <enum>QAbstractItemView::SelectRows</enum>
             </property>
             <property name="textElideMode">
-             <enum>Qt::ElideLeft</enum>
+             <enum>Qt::ElideMiddle</enum>
             </property>
             <property name="verticalScrollMode">
              <enum>QAbstractItemView::ScrollPerPixel</enum>
@@ -338,8 +322,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="feather/gui_resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

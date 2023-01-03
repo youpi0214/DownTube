@@ -5,7 +5,6 @@ from PyQt5 import uic
 from pytube import Playlist, YouTube, Stream
 from pytube.exceptions import VideoUnavailable, PytubeError
 
-
 class UIsIndex(enum.Enum):
     HomeView = 0
     YoutubeDownloaderView = 1
@@ -20,7 +19,7 @@ class BaseView(QMainWindow):
 
     def __init__(self, p_height: int = 720, p_width: int = 1080):
         super(BaseView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/main_window.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/main_window.ui", self)
         self.setFixedWidth(p_width)
         self.setFixedHeight(p_height)
         self.container: QVBoxLayout
@@ -69,13 +68,13 @@ class BaseView(QMainWindow):
 class HomeView(QWidget):
     def __init__(self):
         super(HomeView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/home_view.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/home_view.ui", self)
 
 
 class YoutubeDownloaderView(QWidget):
     def __init__(self):
         super(YoutubeDownloaderView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/downloader_view.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/downloader_view.ui", self)
 
         self.DownloadNow_pushButton.clicked.connect(self.download_now)
         self.AddToQueue_pushButton.clicked.connect(self.add_to_queue)
@@ -92,11 +91,12 @@ class YoutubeDownloaderView(QWidget):
         try:
             media = YouTube(self.YoutubeURL_lineEdit.text())
             self.DownProcesses_tableWidget.insertRow(self.DownProcesses_tableWidget.rowCount())
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 1, media.thumbnail_url)
-            self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 1,
-                                                   QTableWidgetItem(media.channel_id))
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 3, QTableWidgetItem(media.title))
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 4, #PROGRESS)
+            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 0,
+            #                                        QTableWidgetItem(media.thumbnail_url))
+            #self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 1, QTableWidgetItem(media.author))
+            self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 2,
+                                                   QTableWidgetItem(media.title))
+            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 3, #PROGRESS)
         except PytubeError:
             message_except = QMessageBox()
             message_except.setText("Invalid URL, please try again.")
@@ -134,28 +134,28 @@ class YoutubeDownloaderView(QWidget):
 class VideoEditorView(QWidget):
     def __init__(self):
         super(VideoEditorView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/video_editor_view.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/video_editor_view.ui", self)
 
 
 class AudioEditorView(QWidget):
     def __init__(self):
         super(AudioEditorView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/audio_editor_view.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/audio_editor_view.ui", self)
 
 
 class SettingsView(QWidget):
     def __init__(self):
         super(SettingsView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/settings_view.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/settings_view.ui", self)
 
 
 class AboutView(QWidget):
     def __init__(self):
         super(AboutView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/about_view.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/about_view.ui", self)
 
 
 class HelpView(QWidget):
     def __init__(self):
         super(HelpView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/help_view.ui", self)
+        uic.loadUi("C:/Users/Ziyad/PycharmProjects/DownTube/resources/gui/help_view.ui", self)
