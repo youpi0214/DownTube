@@ -14,13 +14,15 @@ class Home_Window(QMainWindow):
         self.Editor_push.clicked.connect(self.Editor_clicker)
         self.Settings_push.clicked.connect(self.Settings_clicker)
 
-
     def YoutubeDownloader_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() + 1)# YTDOWNLOADER Window index is 1 in stack so we increment +1
+        widget.setCurrentIndex(widget.currentIndex() + 1)  # YTDOWNLOADER Window index is 1 in stack so we increment +1
+
     def Editor_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() + 2)
+
     def Settings_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() + 3)
+
 
 class YoutubeDownloader_Window(QMainWindow):
     def __init__(self):
@@ -39,6 +41,7 @@ class YoutubeDownloader_Window(QMainWindow):
 
     def Editor_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
     def Settings_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() + 2)
 
@@ -47,7 +50,6 @@ class YoutubeDownloader_Window(QMainWindow):
             self.YoutubeURL_lineEdit.setEnabled(True)
             self.DownloadNow_pushButton.setEnabled(True)
             self.AddToQueue_pushButton.setEnabled(True)
-
 
     def addtoqueue(self):
         try:
@@ -62,8 +64,6 @@ class YoutubeDownloader_Window(QMainWindow):
             message_except = QMessageBox()
             message_except.setText("Invalid URL, please try again.")
             message_except.exec()
-
-
 
         # playlist_url = self.YoutubeURL_lineEdit.text()
         # p = Playlist(playlist_url)
@@ -111,6 +111,7 @@ class Editor_Window(QMainWindow):
     def Settings_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+
 class Settings_Window(QMainWindow):
     def __init__(self):
         super(Settings_Window, self).__init__()
@@ -127,6 +128,7 @@ class Settings_Window(QMainWindow):
 
     def Home_clicker(self):
         widget.setCurrentIndex(widget.currentIndex() - 3)
+
 
 # main
 app = QApplication(sys.argv)
