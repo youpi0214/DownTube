@@ -1,9 +1,15 @@
-import sys
+import enum
 
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from pytube import Playlist, YouTube, Stream
 from pytube.exceptions import VideoUnavailable, PytubeError
+
+
+class UI_Index(enum.Enum):
+    Home_Window = 0
+    YoutubeDownloader_Window = 1
+    Editor_Window = 2
 
 
 class Home_Window(QMainWindow):
@@ -13,15 +19,6 @@ class Home_Window(QMainWindow):
         self.YTdown_push.clicked.connect(self.YoutubeDownloader_clicker)
         self.Editor_push.clicked.connect(self.Editor_clicker)
         self.Settings_push.clicked.connect(self.Settings_clicker)
-
-    def YoutubeDownloader_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() + 1)  # YTDOWNLOADER Window index is 1 in stack so we increment +1
-
-    def Editor_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() + 2)
-
-    def Settings_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() + 3)
 
 
 class YoutubeDownloader_Window(QMainWindow):
@@ -35,15 +32,6 @@ class YoutubeDownloader_Window(QMainWindow):
         self.AddToQueue_pushButton.clicked.connect(self.addtoqueue)
         self.Video_radioButton.clicked.connect(self.video_or_audio)
         self.Audio_radioButton.clicked.connect(self.video_or_audio)
-
-    def Home_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() - 1)
-
-    def Editor_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-
-    def Settings_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() + 2)
 
     def video_or_audio(self):
         if (self.Video_radioButton.isChecked() or self.Audio_radioButton.isChecked()):
@@ -102,15 +90,6 @@ class Editor_Window(QMainWindow):
         self.YTdown_push.clicked.connect(self.YoutubeDownloader_clicker)
         self.Settings_push.clicked.connect(self.Settings_clicker)
 
-    def YoutubeDownloader_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() - 1)
-
-    def Home_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() - 2)
-
-    def Settings_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-
 
 class Settings_Window(QMainWindow):
     def __init__(self):
@@ -119,29 +98,3 @@ class Settings_Window(QMainWindow):
         self.Home_push.clicked.connect(self.Home_clicker)
         self.Editor_push.clicked.connect(self.Editor_clicker)
         self.YTdown_push.clicked.connect(self.YoutubeDownloader_clicker)
-
-    def YoutubeDownloader_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() - 2)
-
-    def Editor_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() - 1)
-
-    def Home_clicker(self):
-        widget.setCurrentIndex(widget.currentIndex() - 3)
-
-
-# main
-app = QApplication(sys.argv)
-widget = QStackedWidget()
-Homewindow = Home_Window()
-YTDownloadWindow = YoutubeDownloader_Window()
-EditorWindow = Editor_Window()
-SettingsWindow = Settings_Window()
-widget.addWidget(Homewindow)
-widget.addWidget(YTDownloadWindow)
-widget.addWidget(EditorWindow)
-widget.addWidget(SettingsWindow)
-widget.setFixedHeight(1000)
-widget.setFixedWidth(1000)
-widget.show()
-app.exec()
