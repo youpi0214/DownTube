@@ -1,3 +1,5 @@
+import enum
+
 from pytube import YouTube
 from pytube.cli import on_progress
 import unicodedata
@@ -21,17 +23,36 @@ def slugify(value, allow_unicode=False):
     return re.sub(r'[-\s]+', '-', value).strip('-_')
 
 
+class DownloadState(enum.Enum):
+    READY = 0
+    DOWNLOADING = 1
+    PAUSED = 2
+    FINISHED = 3
+    CANCELLED = 4
+    FAILED = -1
+
+
 class DownloadProcess(YouTube):
 
     def __init__(self, p_link, **kwargs):
         super(DownloadProcess, self).__init__(p_link, on_progress_callback=on_progress)
+        self.state = DownloadState.READY
         self.streams.first()
         param = kwargs
 
     def start_download(self):
-        title = slugify(value=self.title) + '.mp4'
-        self.streams.filter(file_extension='mp4').get_highest_resolution().download(skip_existing=False, timeout=5,
-                                                                                    filename=title)
+
+        try:
+            title = slugify(value=self.title) + '.mp4'
+            self.streams.filter(file_extension='mp4').get_highest_resolution().download(skip_existing=False, timeout=5,
+                                                                                        filename=title)
+            self.state = DownloadState.DOWNLOADING
+        except TimeoutError:
+            pass
+        except Exception:
+            pass
+
+
 
 
 if __name__ == '__main__':
