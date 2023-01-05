@@ -2,6 +2,7 @@ import enum
 
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
+from PyQt5 import QtCore
 from pytube import Playlist, YouTube, Stream
 from pytube.exceptions import VideoUnavailable, PytubeError
 
@@ -89,18 +90,14 @@ class YoutubeDownloaderView(QWidget):
 
     def add_to_queue(self):
         try:
-            media = YouTube(self.YoutubeURL_lineEdit.text())
+            url_validation_test = YouTube(self.YoutubeURL_lineEdit.text()) # Temporary line, we will have to call a function in backend that handles exceptions before downloading
             self.DownProcesses_tableWidget.insertRow(self.DownProcesses_tableWidget.rowCount())
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 0,
-            #                                        QTableWidgetItem(media.thumbnail_url))
-            #self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 1, QTableWidgetItem(media.author))
-            self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 2,
-                                                   QTableWidgetItem(media.title))
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 3, #PROGRESS)
+            self.mediaDataInsertion(self.YoutubeURL_lineEdit.text(), self.DownProcesses_tableWidget.rowCount() - 1)
         except PytubeError:
             message_except = QMessageBox()
             message_except.setText("Invalid URL, please try again.")
             message_except.exec()
+
 
         # playlist_url = self.YoutubeURL_lineEdit.text()
         # p = Playlist(playlist_url)
@@ -120,15 +117,37 @@ class YoutubeDownloaderView(QWidget):
 
     def download_now(self):
         try:
-            media = YouTube(self.YoutubeURL_lineEdit.text())
+            url_validation_test = YouTube(self.YoutubeURL_lineEdit.text()) # Temporary line, we will have to call a function in backend that handles exceptions before downloading
+            self.DownProcesses_tableWidget.insertRow(0)
+            self.mediaDataInsertion(self.YoutubeURL_lineEdit.text(), 0)
+
         except PytubeError:
             message_except = QMessageBox()
             message_except.setText("Invalid URL, please try again.")
             message_except.exec()
-        else:
-            message_ok = QMessageBox()
-            message_ok.setText("Now downloading ...")
-            message_ok.exec()
+
+    def mediaDataInsertion(self, URL : str, current_row : int):
+        media = YouTube(URL)
+        thumbnail_qitem = QTableWidgetItem(media.thumbnail_url)
+        author_qitem = QTableWidgetItem(media.author)
+        title_qitem = QTableWidgetItem(media.title)
+        #self.progressbar = QProgressBar(self)
+        #progress_bar_qitem = QTableWidgetItem(self.progressbar)
+        self.DownProcesses_tableWidget.setItem(current_row, 0,
+                                               thumbnail_qitem)
+        self.DownProcesses_tableWidget.setItem(current_row, 1,
+                                               author_qitem)
+        self.DownProcesses_tableWidget.setItem(current_row, 2,
+                                               title_qitem)
+        # self.DownProcesses_tableWidget.setItem(current_row, 3,
+        #                                        progress_bar_qitem)
+
+
+        thumbnail_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+        author_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+        title_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+
+
 
 
 class VideoEditorView(QWidget):
