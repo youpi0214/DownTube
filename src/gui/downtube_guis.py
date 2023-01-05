@@ -126,35 +126,46 @@ class YoutubeDownloaderView(QWidget):
             message_except.setText("Invalid URL, please try again.")
             message_except.exec()
 
+    def image_widget(self, URL : str):
+        image = QtGui.QPixmap(URL)
+        box2 = QHBoxLayout()
+        mylabel = QLabel()
+        mylabel.setPixmap(image)
+        mylabel.setContentsMargins(0, 0, 0, 0)
+        mylabel.setFixedSize(150, 150)
+        box2.addWidget(mylabel)
+        widget = QWidget()
+        widget.setLayout(box2)
+        return widget
+
+
     def mediaDataInsertion(self, URL : str, current_row : int):
+
         media = YouTube(URL)
 
-        thumbnail_qitem = QTableWidgetItem(media.thumbnail_url)
+        # thumbnail_qitem = QTableWidgetItem(media.thumbnail_url)
         author_qitem = QTableWidgetItem(media.author)
         title_qitem = QTableWidgetItem(media.title)
 
-        box = QHBoxLayout()# Progress Bar
+        box = QHBoxLayout()# On cree une box, et un autre widget. On etablie ensuite la taille du widget a celui de la box qui contient le progress bar
         box.addWidget(QProgressBar())
         w = QWidget()
         w.setLayout(box)
 
-        # pixmap = QtGui.QPixmap("https://www.shareicon.net/data/2015/09/20/104253_down_256x256.png")
-        # download_icon = Q
+        download_button_image = self.image_widget("C:/Users/Ziyad/Desktop/DownTube_download_logo.png")
+        thumbnail = self.image_widget(media.thumbnail_url)
 
-        self.DownProcesses_tableWidget.setItem(current_row, 0,
-                                               thumbnail_qitem)
+        self.DownProcesses_tableWidget.setCellWidget(current_row, 0, thumbnail)
         self.DownProcesses_tableWidget.setItem(current_row, 1,
                                                author_qitem)
         self.DownProcesses_tableWidget.setItem(current_row, 2,
                                                title_qitem)
         self.DownProcesses_tableWidget.setCellWidget(current_row, 3, w)
 
-        thumbnail_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.DownProcesses_tableWidget.setCellWidget(current_row, 4, download_button_image)
+
         author_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
         title_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
-
-
-
 
 
 class VideoEditorView(QWidget):
