@@ -2,7 +2,7 @@ import enum
 
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 from pytube import Playlist, YouTube, Stream
 from pytube.exceptions import VideoUnavailable, PytubeError
 
@@ -128,24 +128,31 @@ class YoutubeDownloaderView(QWidget):
 
     def mediaDataInsertion(self, URL : str, current_row : int):
         media = YouTube(URL)
+
         thumbnail_qitem = QTableWidgetItem(media.thumbnail_url)
         author_qitem = QTableWidgetItem(media.author)
         title_qitem = QTableWidgetItem(media.title)
-        #self.progressbar = QProgressBar(self)
-        #progress_bar_qitem = QTableWidgetItem(self.progressbar)
+
+        box = QHBoxLayout()# Progress Bar
+        box.addWidget(QProgressBar())
+        w = QWidget()
+        w.setLayout(box)
+
+        # pixmap = QtGui.QPixmap("https://www.shareicon.net/data/2015/09/20/104253_down_256x256.png")
+        # download_icon = Q
+
         self.DownProcesses_tableWidget.setItem(current_row, 0,
                                                thumbnail_qitem)
         self.DownProcesses_tableWidget.setItem(current_row, 1,
                                                author_qitem)
         self.DownProcesses_tableWidget.setItem(current_row, 2,
                                                title_qitem)
-        # self.DownProcesses_tableWidget.setItem(current_row, 3,
-        #                                        progress_bar_qitem)
-
+        self.DownProcesses_tableWidget.setCellWidget(current_row, 3, w)
 
         thumbnail_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
         author_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
         title_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+
 
 
 
