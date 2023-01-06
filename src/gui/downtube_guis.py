@@ -1,6 +1,7 @@
 import enum
 
 from PyQt5.QtWidgets import *
+import requests
 from PyQt5 import uic
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pytube import Playlist, YouTube, Stream
@@ -131,8 +132,7 @@ class YoutubeDownloaderView(QWidget):
         box2 = QHBoxLayout()
         mylabel = QLabel()
         mylabel.setPixmap(image)
-        mylabel.setContentsMargins(0, 0, 0, 0)
-        mylabel.setFixedSize(150, 150)
+        #mylabel.setGeometry(150, 80)
         box2.addWidget(mylabel)
         widget = QWidget()
         widget.setLayout(box2)
@@ -143,7 +143,6 @@ class YoutubeDownloaderView(QWidget):
 
         media = YouTube(URL)
 
-        # thumbnail_qitem = QTableWidgetItem(media.thumbnail_url)
         author_qitem = QTableWidgetItem(media.author)
         title_qitem = QTableWidgetItem(media.title)
 
@@ -152,8 +151,12 @@ class YoutubeDownloaderView(QWidget):
         w = QWidget()
         w.setLayout(box)
 
+        thumbnail_data = QtGui.QImage()
+        thumbnail_data.loadFromData(requests.get(media.thumbnail_url).content)
+        thumbnail = self.image_widget(thumbnail_data)
+
         download_button_image = self.image_widget("C:/Users/Ziyad/Desktop/DownTube_download_logo.png")
-        thumbnail = self.image_widget(media.thumbnail_url)
+
 
         self.DownProcesses_tableWidget.setCellWidget(current_row, 0, thumbnail)
         self.DownProcesses_tableWidget.setItem(current_row, 1,
