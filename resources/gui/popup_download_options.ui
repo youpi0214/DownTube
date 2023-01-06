@@ -86,7 +86,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="comboBox_2"/>
+                <widget class="QComboBox" name="video_res"/>
                </item>
               </layout>
              </widget>
@@ -107,13 +107,13 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="comboBox_3"/>
+                <widget class="QComboBox" name="video_fps"/>
                </item>
               </layout>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox">
+             <widget class="QCheckBox" name="progressive_checkbox">
               <property name="text">
                <string>Progressive</string>
               </property>
@@ -157,7 +157,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="comboBox"/>
+                <widget class="QComboBox" name="audio_sample_rate"/>
                </item>
               </layout>
              </widget>
@@ -302,9 +302,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>default_path_checkBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>Dialog</receiver>
+   <slot>on_default_checkBox()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>494</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>save_changes()</slot>
   <slot>cancel_option_change()</slot>
+  <slot>on_default_checkBox()</slot>
  </slots>
 </ui>
