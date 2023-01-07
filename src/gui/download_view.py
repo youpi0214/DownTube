@@ -1,7 +1,8 @@
+import requests
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
-from PyQt5.uic.properties import QtCore
+from PyQt5.uic.properties import QtCore, QtGui
 from pytube import YouTube
 from pytube.exceptions import PytubeError
 from utilities.general_utilities import relative_to_abs_path, does_path_exist
@@ -101,6 +102,9 @@ class YoutubeDownloaderView(QWidget):
         self.Video_radioButton.clicked.connect(self.video_or_audio)
         self.Audio_radioButton.clicked.connect(self.video_or_audio)
 
+    def download_options_popup(self):
+        self.dialog.show()
+
     def video_or_audio(self):
         if self.Video_radioButton.isChecked() or self.Audio_radioButton.isChecked():
             self.YoutubeURL_lineEdit.setEnabled(True)
@@ -109,13 +113,9 @@ class YoutubeDownloaderView(QWidget):
 
     def add_to_queue(self):
         try:
-            media = YouTube(self.YoutubeURL_lineEdit.text())
+            #TODO backend call for data to display in the row goes here
             self.DownProcesses_tableWidget.insertRow(self.DownProcesses_tableWidget.rowCount())
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 1, media.thumbnail_url)
-            self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.currentRow(), 1,
-                                                   QTableWidgetItem(media.channel_id))
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 3, QTableWidgetItem(media.title))
-            # self.DownProcesses_tableWidget.setItem(self.DownProcesses_tableWidget.rowCount(), 4, #PROGRESS)
+            self.mediaDataInsertion(self.YoutubeURL_lineEdit.text(), self.DownProcesses_tableWidget.rowCount() - 1)
         except PytubeError:
             message_except = QMessageBox()
             message_except.setText("Invalid URL, please try again.")
@@ -137,17 +137,55 @@ class YoutubeDownloaderView(QWidget):
         #         message_ok.exec()
         #         #yt.streams.first().download()
 
-    def download_options_popup(self):
-        self.dialog.show()
-
     def download_now(self):
         try:
-            media = YouTube(self.YoutubeURL_lineEdit.text())
+            url_validation_test = YouTube(
+                self.YoutubeURL_lineEdit.text())  # Temporary line, we will have to call a function in backend that handles exceptions before downloading
+            self.DownProcesses_tableWidget.insertRow(0)
+            self.mediaDataInsertion(self.YoutubeURL_lineEdit.text(), 0)
+
         except PytubeError:
             message_except = QMessageBox()
             message_except.setText("Invalid URL, please try again.")
             message_except.exec()
-        else:
-            message_ok = QMessageBox()
-            message_ok.setText("Now downloading ...")
-            message_ok.exec()
+
+    def image_widget(self, URL: str):
+        image = QtGui.QPixmap(URL)
+        box2 = QHBoxLayout()
+        mylabel = QLabel()
+        mylabel.setPixmap(image)
+        # mylabel.setGeometry(150, 80)
+        box2.addWidget(mylabel)
+        widget = QWidget()
+        widget.setLayout(box2)
+        return widget
+
+    def mediaDataInsertion(self, URL: str, current_row: int):
+
+        media = YouTube(URL)
+
+        author_qitem = QTableWidgetItem(media.author)
+        title_qitem = QTableWidgetItem(media.title)
+
+        box = QHBoxLayout()  # On cree une box, et un autre widget. On etablie ensuite la taille du widget a celui de la box qui contient le progress bar
+        box.addWidget(QProgressBar())
+        w = QWidget()
+        w.setLayout(box)
+
+        thumbnail_data = QtGui.QImage()
+        thumbnail_data.loadFromData(requests.get(media.thumbnail_url).content)
+        thumbnail = self.image_widget(thumbnail_data)
+
+        # download_button_image = self.image_widget("C:/Users/Ziyad/Desktop/DownTube_download_logo.png")
+
+        self.DownProcesses_tableWidget.setCellWidget(current_row, 0, thumbnail)
+        self.DownProcesses_tableWidget.setItem(current_row, 1,
+                                               author_qitem)
+        self.DownProcesses_tableWidget.setItem(current_row, 2,
+                                               title_qitem)
+        self.DownProcesses_tableWidget.setCellWidget(current_row, 3, w)
+
+        self.DownProcesses_tableWidget.setCellWidget(current_row, 4, thumbnail)
+
+        author_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+        title_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
