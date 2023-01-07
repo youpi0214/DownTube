@@ -228,12 +228,12 @@
            <x>0</x>
            <y>0</y>
            <width>863</width>
-           <height>438</height>
+           <height>435</height>
           </rect>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QTableWidget" name="DownProcesses_tableWidget_3">
+           <widget class="QTableWidget" name="DownProcesses_tableWidget">
             <property name="font">
              <font>
               <family>Unispace</family>

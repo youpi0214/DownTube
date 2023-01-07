@@ -1,8 +1,7 @@
 import requests
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import *
-from PyQt5 import uic
-from PyQt5.uic.properties import QtCore, QtGui
+from PyQt5 import uic, QtCore, QtGui
 from pytube import YouTube
 from pytube.exceptions import PytubeError
 from utilities.general_utilities import relative_to_abs_path, does_path_exist
@@ -113,7 +112,7 @@ class YoutubeDownloaderView(QWidget):
 
     def add_to_queue(self):
         try:
-            #TODO backend call for data to display in the row goes here
+            # TODO backend call for data to display in the row goes here
             self.DownProcesses_tableWidget.insertRow(self.DownProcesses_tableWidget.rowCount())
             self.mediaDataInsertion(self.YoutubeURL_lineEdit.text(), self.DownProcesses_tableWidget.rowCount() - 1)
         except PytubeError:
