@@ -49,7 +49,7 @@
                    <number>0</number>
                   </property>
                   <item alignment="Qt::AlignHCenter">
-                   <widget class="QRadioButton" name="Video_radioButton">
+                   <widget class="QRadioButton" name="video_radioButton">
                     <property name="font">
                      <font>
                       <family>Unispace</family>
@@ -64,7 +64,7 @@
                    </widget>
                   </item>
                   <item alignment="Qt::AlignHCenter">
-                   <widget class="QRadioButton" name="Audio_radioButton">
+                   <widget class="QRadioButton" name="audio_radioButton">
                     <property name="font">
                      <font>
                       <family>Unispace</family>
@@ -82,7 +82,7 @@
                 </widget>
                </item>
                <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                <widget class="QRadioButton" name="Playlist_radioButton">
+                <widget class="QRadioButton" name="playlist_radioButton">
                  <property name="font">
                   <font>
                    <family>Unispace</family>
@@ -109,7 +109,7 @@
              <widget class="QWidget" name="widget_4" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <item>
-                <widget class="QLabel" name="YoutubeURL_Label">
+                <widget class="QLabel" name="youtubeURL_Label">
                  <property name="font">
                   <font>
                    <family>Unispace</family>
@@ -124,7 +124,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="YoutubeURL_lineEdit">
+                <widget class="QLineEdit" name="youtubeURL_lineEdit">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -137,7 +137,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="ChangeQuality_pushButton">
+                <widget class="QPushButton" name="changeQuality_pushButton">
                  <property name="minimumSize">
                   <size>
                    <width>30</width>
@@ -160,7 +160,7 @@
              <widget class="QWidget" name="widget_5" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QPushButton" name="DownloadNow_pushButton">
+                <widget class="QPushButton" name="downloadNow_pushButton">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -178,7 +178,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="AddToQueue_pushButton">
+                <widget class="QPushButton" name="addToQueue_pushButton">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -218,7 +218,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QScrollArea" name="DownProcesses_scrollArea">
+       <widget class="QScrollArea" name="downloadProcess_scrollArea">
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
@@ -233,7 +233,7 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QTableWidget" name="DownProcesses_tableWidget">
+           <widget class="QTableWidget" name="downloadProcess_tableWidget">
             <property name="font">
              <font>
               <family>Unispace</family>
@@ -343,7 +343,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>ChangeQuality_pushButton</sender>
+   <sender>changeQuality_pushButton</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
    <slot>download_options_popup()</slot>
@@ -358,8 +358,75 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>downloadNow_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>download_now()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>373</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>347</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addToQueue_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>add_to_queue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>527</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>347</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>audio_radioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>enable_download_and_linkEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>521</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>347</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>video_radioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>enable_download_and_linkEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>379</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>347</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>download_options_popup()</slot>
+  <slot>download_now()</slot>
+  <slot>add_to_queue()</slot>
+  <slot>enable_download_and_linkEdit()</slot>
  </slots>
 </ui>

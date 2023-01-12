@@ -6,13 +6,13 @@ from PyQt5.QtWidgets import *
 from pytube import YouTube
 
 import utilities.general_utilities
-from gui.downtube_guis import BaseView
+from gui.downtube_guis import ViewController
 
 
 class Controller:
 
     def __init__(self):
-        self.base_view = BaseView()
+        self.base_view = ViewController()
 
     def display_view(self):
         self.base_view.show()

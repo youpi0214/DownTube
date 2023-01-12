@@ -1,19 +1,9 @@
-import requests
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore, QtGui
-from pytube import YouTube
-from pytube.exceptions import PytubeError
+from PyQt5 import uic, QtCore
+from controllers.download_controller import DownloadController
 from utilities.general_utilities import relative_to_abs_path, does_path_exist
-from utilities.video_utilities import SupportedAudioSampleRate, SupportedVideoResolution, SupportedVideoFPS
-
-DOWNLOAD_PATH = 'download_path'
-EDIT_LINE_VALUE = 'text_edit_value'
-DEFAULT_PATH_CHECKED = 'default_path'
-VIDEO_RES = 'video_res'
-VIDEO_FPS = 'video_fps'
-AUDIO_SAMPLERATE = 'audio_samplerate'
-PROGRESSIVE = 'progressive'
+from utilities.video_utilities import *
 
 
 class DownloadOptionPopup(QDialog):
@@ -90,101 +80,85 @@ class DownloadOptionPopup(QDialog):
                                    "PATH NOT FOUND!\nThe path is either Invalid or does not exist")
 
 
+class DownProcessesTableRow:
+
+    def __init__(self, p_current_row: int, p_thumbnail_file, p_author: str, p_title: str, p_progressbar: QProgressBar):
+        self.current_row = p_current_row
+        self.__image_widget(p_thumbnail_file)
+        self.author_qitem: QTableWidgetItem = QTableWidgetItem(p_author)
+        self.title_qitem: QTableWidgetItem = QTableWidgetItem(p_title)
+        self.progressbar = p_progressbar  # TODO
+
+        self.author_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+        self.title_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+
+    def __image_widget(self, p_image_file: str):
+        self.image: QWidget = QWidget()
+        image_displayer = QLabel(self.image)
+        image_displayer.setPixmap(QPixmap(p_image_file))
+        image_displayer.setScaledContents(True)
+        image_displayer.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+
+    def __progressbar(self, p_progressbar: QProgressBar):
+        self.progressbar: QProgressBar = p_progressbar
+        # TODO finish progressbar
+
+    def __del__(self):
+        """TODO destructor remove the listener on the progressbar"""
+        pass
+
+    def add_process_row_to_table(self, p_table_widget: QTableWidget):
+        pass
+
+
 class YoutubeDownloaderView(QWidget):
-    def __init__(self):
+    def __init__(self, p_controller):
         super(YoutubeDownloaderView, self).__init__()
+        self.download_controller: DownloadController = p_controller
         uic.loadUi(relative_to_abs_path("resources/gui/downloader_view.ui"), self)
         self.dialog = DownloadOptionPopup()
 
-        self.DownloadNow_pushButton.clicked.connect(self.download_now)
-        self.AddToQueue_pushButton.clicked.connect(self.add_to_queue)
-        self.Video_radioButton.clicked.connect(self.video_or_audio)
-        self.Audio_radioButton.clicked.connect(self.video_or_audio)
+        self.youtubeURL_lineEdit: QLineEdit
+        self.downloadNow_pushButton: QPushButton
+        self.addToQueue_pushButton: QPushButton
+        self.video_radioButton: QRadioButton
+        self.audio_radioButton: QRadioButton
+        self.downloadProcess_tableWidget: QTableWidget
 
     def download_options_popup(self):
         self.dialog.show()
 
-    def video_or_audio(self):
-        if self.Video_radioButton.isChecked() or self.Audio_radioButton.isChecked():
-            self.YoutubeURL_lineEdit.setEnabled(True)
-            self.DownloadNow_pushButton.setEnabled(True)
-            self.AddToQueue_pushButton.setEnabled(True)
-
-    def add_to_queue(self):
-        try:
-            # TODO backend call for data to display in the row goes here
-            self.DownProcesses_tableWidget.insertRow(self.DownProcesses_tableWidget.rowCount())
-            self.mediaDataInsertion(self.YoutubeURL_lineEdit.text(), self.DownProcesses_tableWidget.rowCount() - 1)
-        except PytubeError:
-            message_except = QMessageBox()
-            message_except.setText("Invalid URL, please try again.")
-            message_except.exec()
-
-        # playlist_url = self.YoutubeURL_lineEdit.text()
-        # p = Playlist(playlist_url)
-        # for url in p.video_urls:
-        #     try:
-        #         yt = YouTube(url)
-        #     except VideoUnavailable:
-        #         message = QMessageBox()
-        #         message.setText("Invalid URL or media, please try again.")
-        #         message.exec()
-        #
-        #     else:
-        #         message_ok = QMessageBox()
-        #         message_ok.setText("Test Worked")
-        #         message_ok.exec()
-        #         #yt.streams.first().download()
+    def enable_download_and_linkEdit(self):
+        """enables the link editor, the download now button and add to queue button if and only if the user selected
+        which type of media he wants to download"""
+        if self.video_radioButton.isChecked() or self.audio_radioButton.isChecked():
+            self.youtubeURL_lineEdit.setEnabled(True)
+            self.downloadNow_pushButton.setEnabled(True)
+            self.addToQueue_pushButton.setEnabled(True)
 
     def download_now(self):
-        try:
-            url_validation_test = YouTube(
-                self.YoutubeURL_lineEdit.text())  # Temporary line, we will have to call a function in backend that handles exceptions before downloading
-            self.DownProcesses_tableWidget.insertRow(0)
-            self.mediaDataInsertion(self.YoutubeURL_lineEdit.text(), 0)
+        download_process_metadata = self.download_controller.add_downloadProcess_backend(
+            self.youtubeURL_lineEdit.text())
+        self.downloadProcess_tableWidget.insertRow(0)
+        self.__add_downloadProcess_view(0)
 
-        except PytubeError:
-            message_except = QMessageBox()
-            message_except.setText("Invalid URL, please try again.")
-            message_except.exec()
+    def add_to_queue(self):
+        download_process_metadata = self.download_controller.add_downloadProcess_backend(
+            self.youtubeURL_lineEdit.text())
+        self.downloadProcess_tableWidget.insertRow(self.downloadProcess_tableWidget.rowCount())
+        self.__add_downloadProcess_view(self.downloadProcess_tableWidget.rowCount() - 1)
 
-    def image_widget(self, URL: str):
-        image = QtGui.QPixmap(URL)
-        box2 = QHBoxLayout()
-        mylabel = QLabel()
-        mylabel.setPixmap(image)
-        # mylabel.setGeometry(150, 80)
-        box2.addWidget(mylabel)
-        widget = QWidget()
-        widget.setLayout(box2)
-        return widget
+    def __add_downloadProcess_view(self, p_current_row: int, p_thumbnail_file, p_author: str, p_title: str):
+        process_row = DownProcessesTableRow(p_current_row, p_thumbnail_file, p_author, p_title, QProgressBar())
+        process_row.add_process_row_to_table(self.downloadProcess_tableWidget)
 
-    def mediaDataInsertion(self, URL: str, current_row: int):
+    def delete_process_row(self):
+        # TODO determine the process clicked on
+        # TODO stop backend download
+        # TODO delete process in backend
+        # TODO lastly deleteprocess in view
+        pass
 
-        media = YouTube(URL)
-
-        author_qitem = QTableWidgetItem(media.author)
-        title_qitem = QTableWidgetItem(media.title)
-
-        box = QHBoxLayout()  # On cree une box, et un autre widget. On etablie ensuite la taille du widget a celui de la box qui contient le progress bar
-        box.addWidget(QProgressBar())
-        w = QWidget()
-        w.setLayout(box)
-
-        thumbnail_data = QtGui.QImage()
-        thumbnail_data.loadFromData(requests.get(media.thumbnail_url).content)
-        thumbnail = self.image_widget(thumbnail_data)
-
-        # download_button_image = self.image_widget("C:/Users/Ziyad/Desktop/DownTube_download_logo.png")
-
-        self.DownProcesses_tableWidget.setCellWidget(current_row, 0, thumbnail)
-        self.DownProcesses_tableWidget.setItem(current_row, 1,
-                                               author_qitem)
-        self.DownProcesses_tableWidget.setItem(current_row, 2,
-                                               title_qitem)
-        self.DownProcesses_tableWidget.setCellWidget(current_row, 3, w)
-
-        self.DownProcesses_tableWidget.setCellWidget(current_row, 4, thumbnail)
-
-        author_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
-        title_qitem.setTextAlignment(QtCore.Qt.AlignCenter)
+# thumbnail_data = QImage()
+# thumbnail_data.loadFromData(requests.get(media.thumbnail_url).content)
+# thumbnail = self.image_widget(thumbnail_data)

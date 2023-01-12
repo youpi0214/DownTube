@@ -1,5 +1,12 @@
 import enum
 
+DOWNLOAD_PATH = 'download_path'
+EDIT_LINE_VALUE = 'text_edit_value'
+DEFAULT_PATH_CHECKED = 'default_path'
+VIDEO_RES = 'video_res'
+VIDEO_FPS = 'video_fps'
+AUDIO_SAMPLERATE = 'audio_samplerate'
+PROGRESSIVE = 'progressive'
 
 class SupportedVideoResolution(enum.Enum):
     RES_144p = '144p'

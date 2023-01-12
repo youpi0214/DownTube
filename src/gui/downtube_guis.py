@@ -3,6 +3,7 @@ import enum
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
+from controllers.download_controller import DownloadController
 from gui.download_view import YoutubeDownloaderView
 from utilities.general_utilities import relative_to_abs_path
 
@@ -17,11 +18,11 @@ class UIsIndex(enum.Enum):
     HelpView = 6
 
 
-class BaseView(QMainWindow):
+class ViewController(QMainWindow):
 
     def __init__(self, p_height: int = 720, p_width: int = 1080):
-        super(BaseView, self).__init__()
-        uic.loadUi("C:/Users/ouamb/Documents/Github/DownTube/resources/gui/main_window.ui", self)
+        super(ViewController, self).__init__()
+        uic.loadUi(relative_to_abs_path("resources/gui/main_window.ui"), self)
         self.setFixedWidth(p_width)
         self.setFixedHeight(p_height)
         self.container: QVBoxLayout
@@ -36,16 +37,20 @@ class BaseView(QMainWindow):
         self.about_view_btn: QPushButton
         self.help_view_btn: QPushButton
 
+        self.__init_controllers()
         self.__addUIs()
 
     def __addUIs(self):
         self.rightMenuContainer.addWidget(HomeView())
-        self.rightMenuContainer.addWidget(YoutubeDownloaderView())
+        self.rightMenuContainer.addWidget(YoutubeDownloaderView(self.download_controller))
         self.rightMenuContainer.addWidget(VideoEditorView())
         self.rightMenuContainer.addWidget(AudioEditorView())
         self.rightMenuContainer.addWidget(SettingsView())
         self.rightMenuContainer.addWidget(AboutView())
         self.rightMenuContainer.addWidget(HelpView())
+
+    def __init_controllers(self):
+        self.download_controller: DownloadController = DownloadController()
 
     def switch_view(self):
         sender = self.sender()
