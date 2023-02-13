@@ -1,3 +1,4 @@
+import json
 import os.path
 import pathlib
 import sys
@@ -23,3 +24,13 @@ if __name__ == '__main__':
     controller = Controller()
     controller.display_view()
     app.exec()
+
+    # from yt_dlp import YoutubeDL
+    #
+    # URL = 'https://www.youtube.com/watch?v=r1Fx0tqK5Z4&ab_channel=SashaSloanVEVO'
+    # ydl_opts = {}
+    # with YoutubeDL(ydl_opts) as ydl:
+    #     info = ydl.extract_info(URL, download=False)
+    #
+    #     # ℹ️ ydl.sanitize_info makes the info json-serializable
+    #     print(json.dumps(ydl.sanitize_info(info)))
